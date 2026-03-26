@@ -1,0 +1,50 @@
+import { MD3DarkTheme } from 'react-native-paper';
+
+export const theme = {
+  ...MD3DarkTheme,
+  colors: {
+    ...MD3DarkTheme.colors,
+    primary: '#10B981',
+    onPrimary: '#FFFFFF',
+    primaryContainer: '#064E3B',
+    onPrimaryContainer: '#6EE7B7',
+    secondary: '#34D399',
+    onSecondary: '#022C22',
+    secondaryContainer: '#065F46',
+    onSecondaryContainer: '#A7F3D0',
+    tertiary: '#6EE7B7',
+    background: '#0B1120',
+    onBackground: '#F1F5F9',
+    surface: '#111827',
+    onSurface: '#E2E8F0',
+    surfaceVariant: '#1E293B',
+    onSurfaceVariant: '#94A3B8',
+    outline: '#334155',
+    outlineVariant: '#1E293B',
+    error: '#F87171',
+    onError: '#7F1D1D',
+    errorContainer: '#450A0A',
+    onErrorContainer: '#FECACA',
+    inverseSurface: '#E2E8F0',
+    inverseOnSurface: '#111827',
+    inversePrimary: '#065F46',
+  },
+  elevation: {
+    ...MD3DarkTheme.elevation,
+  },
+} as const;
+
+export const COLORS = {
+  emerald: '#10B981',
+  emeraldLight: '#34D399',
+  emeraldDark: '#059669',
+  background: '#0B1120',
+  surface: '#111827',
+  surfaceVariant: '#1E293B',
+  border: '#334155',
+  textPrimary: '#F1F5F9',
+  textSecondary: '#94A3B8',
+  danger: '#F87171',
+  warning: '#FBBF24',
+  info: '#60A5FA',
+};
