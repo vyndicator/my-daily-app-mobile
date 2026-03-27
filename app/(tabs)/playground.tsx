@@ -3,18 +3,14 @@ import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text, Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import * as Notifications from 'expo-notifications';
 import { useBirthdaysStore } from '../../stores/birthdays.store';
 import { useHabitsStore } from '../../stores/habits.store';
+import client from '../../api/client';
 import { COLORS } from '../../theme';
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
+async function triggerDailySummaryNotification() {
+  await client.post('/api/notifications/trigger');
+}
 
 export default function PlaygroundScreen() {
   const { birthdays, load: loadBirthdays } = useBirthdaysStore();
@@ -39,40 +35,6 @@ export default function PlaygroundScreen() {
     loadBirthdays();
     loadHabits();
   }, []);
-
-  async function triggerDailySummaryNotification() {
-    const { status } = await Notifications.requestPermissionsAsync();
-    if (status !== 'granted') return;
-
-    const lines: string[] = [];
-
-    if (todaysBirthdays.length > 0) {
-      const names = todaysBirthdays.map((b) => b.name).join(', ');
-      lines.push(`🎂 ${names}`);
-    }
-
-    const todoPlural = openTodos.length === 1 ? 'todo' : 'todos';
-    lines.push(
-      openTodos.length > 0
-        ? `📋 ${openTodos.length} open ${todoPlural}`
-        : '📋 All todos done',
-    );
-
-    const habitPlural = openHabits.length === 1 ? 'habit' : 'habits';
-    lines.push(
-      openHabits.length > 0
-        ? `✅ ${openHabits.length} open ${habitPlural}`
-        : '✅ All habits done',
-    );
-
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: 'Daily Summary',
-        body: lines.join('\n'),
-      },
-      trigger: null,
-    });
-  }
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>

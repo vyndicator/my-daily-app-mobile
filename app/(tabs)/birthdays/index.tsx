@@ -18,14 +18,6 @@ import { Birthday } from '../../../types';
 
 type Filter = 'all' | 'month' | 'week';
 
-function getAge(dateString: string): number {
-  const today = new Date();
-  const birth = new Date(dateString);
-  let age = today.getFullYear() - birth.getFullYear();
-  const m = today.getMonth() - birth.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
-  return age;
-}
 
 function getBadgeColor(days: number): string {
   if (days === 0) return COLORS.emerald;
@@ -61,7 +53,6 @@ export default function BirthdaysScreen() {
 
   const renderItem = ({ item }: { item: Birthday }) => {
     const days = getDaysUntil(item.date);
-    const age = getAge(item.date);
     const badgeColor = getBadgeColor(days);
     const isToday = days === 0;
 
@@ -86,7 +77,7 @@ export default function BirthdaysScreen() {
               color={COLORS.textSecondary}
             />
             <Text style={styles.detail}>
-              {format(parseISO(item.date), 'MMMM d')} · turns {age + 1}
+              {format(parseISO(item.date), 'MMMM d')}
             </Text>
           </View>
           {item.notes ? (
