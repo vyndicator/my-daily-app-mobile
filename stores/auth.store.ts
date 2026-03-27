@@ -57,11 +57,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ loading: true });
     try {
       await client.post('/api/auth/register', { email, password });
-      await get().signIn(email, password);
     } catch (error) {
       set({ loading: false });
       throw error;
     }
+    await get().signIn(email, password);
   },
 
   signOut: async () => {

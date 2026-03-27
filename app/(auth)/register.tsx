@@ -36,8 +36,21 @@ export default function RegisterScreen() {
     }
     try {
       await signUp(email, password);
-    } catch {
-      setError('Registration failed. Email may already be in use.');
+    } catch (err: any) {
+      console.error('[Register] error:', JSON.stringify({
+        status: err?.response?.status,
+        data: err?.response?.data,
+        message: err?.message,
+        code: err?.code,
+      }, null, 2));
+      const status = err?.response?.status;
+      if (status === 409 || status === 422) {
+        setError('This email is already registered. Please log in instead.');
+      } else if (status >= 400 && status < 500) {
+        setError(err?.response?.data?.message || 'Registration failed. Please check your details.');
+      } else {
+        setError('Registration failed. Please check your connection and try again.');
+      }
     }
   };
 
