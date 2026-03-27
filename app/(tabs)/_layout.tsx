@@ -67,6 +67,15 @@ export default function TabsLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="playground"
+        options={{
+          title: 'Playground',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="flask-outline" color={color} size={size} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
