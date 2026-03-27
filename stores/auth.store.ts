@@ -1,7 +1,7 @@
-import { create } from 'zustand';
-import * as SecureStore from 'expo-secure-store';
-import client from '../api/client';
-import { User } from '../types';
+import * as SecureStore from "expo-secure-store";
+import { create } from "zustand";
+import client from "../api/client";
+import { User } from "../types";
 
 interface AuthState {
   user: User | null;
@@ -22,9 +22,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   initialize: async () => {
     try {
-      const token = await SecureStore.getItemAsync('auth_token');
+      const token = await SecureStore.getItemAsync("auth_token");
       if (token) {
-        const response = await client.get('/api/auth/me', {
+        const response = await client.get("/api/auth/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         set({ user: response.data, token, initialized: true });
@@ -32,7 +32,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         set({ initialized: true });
       }
     } catch {
-      await SecureStore.deleteItemAsync('auth_token');
+      await SecureStore.deleteItemAsync("auth_token");
       set({ initialized: true, user: null, token: null });
     }
   },
@@ -40,10 +40,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   signIn: async (email, password) => {
     set({ loading: true });
     try {
-      const response = await client.post('/api/auth/login', { email, password });
+      const response = await client.post("/api/auth/login", {
+        email,
+        password,
+      });
       const { token } = response.data;
-      await SecureStore.setItemAsync('auth_token', token);
-      const userResponse = await client.get('/api/auth/me', {
+      await SecureStore.setItemAsync("auth_token", token);
+      const userResponse = await client.get("/api/auth/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
       set({ user: userResponse.data, token, loading: false });
@@ -56,7 +59,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   signUp: async (email, password) => {
     set({ loading: true });
     try {
-      await client.post('/api/auth/register', { email, password });
+      await client.post("/api/auth/register", { email, password });
     } catch (error) {
       set({ loading: false });
       throw error;
@@ -65,7 +68,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   signOut: async () => {
-    await SecureStore.deleteItemAsync('auth_token');
+    await SecureStore.deleteItemAsync("auth_token");
     set({ user: null, token: null });
   },
 }));

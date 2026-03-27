@@ -1,55 +1,67 @@
-import React, { useState } from 'react';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Link } from "expo-router";
+import React, { useState } from "react";
 import {
-  View,
-  StyleSheet,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-} from 'react-native';
-import { Text, TextInput, Button, HelperText } from 'react-native-paper';
-import { Link } from 'expo-router';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useAuthStore } from '../../stores/auth.store';
-import { COLORS } from '../../theme';
+  StyleSheet,
+  View,
+} from "react-native";
+import { Button, HelperText, Text, TextInput } from "react-native-paper";
+import { useAuthStore } from "../../stores/auth.store";
+import { COLORS } from "../../theme";
 
 export default function RegisterScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const { signUp, loading } = useAuthStore();
 
   const handleRegister = async () => {
-    setError('');
+    setError("");
     if (!email || !password || !confirmPassword) {
-      setError('Please fill in all fields');
+      setError("Please fill in all fields");
       return;
     }
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
     if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError("Password must be at least 6 characters");
       return;
     }
     try {
       await signUp(email, password);
     } catch (err: any) {
-      console.error('[Register] error:', JSON.stringify({
-        status: err?.response?.status,
-        data: err?.response?.data,
-        message: err?.message,
-        code: err?.code,
-      }, null, 2));
+      console.error(
+        "[Register] error:",
+        JSON.stringify(
+          {
+            status: err?.response?.status,
+            data: err?.response?.data,
+            message: err?.message,
+            code: err?.code,
+          },
+          null,
+          2,
+        ),
+      );
       const status = err?.response?.status;
       if (status === 409 || status === 422) {
-        setError('This email is already registered. Please log in instead.');
+        setError("This email is already registered. Please log in instead.");
       } else if (status >= 400 && status < 500) {
-        setError(err?.response?.data?.message || 'Registration failed. Please check your details.');
+        setError(
+          err?.response?.data?.message ||
+            "Registration failed. Please check your details.",
+        );
       } else {
-        setError('Registration failed. Please check your connection and try again.');
+        setError(
+          "Registration failed. Please check your connection and try again.",
+        );
       }
     }
   };
@@ -57,7 +69,7 @@ export default function RegisterScreen() {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView
         contentContainerStyle={styles.scroll}
@@ -65,7 +77,11 @@ export default function RegisterScreen() {
       >
         <View style={styles.header}>
           <View style={styles.iconContainer}>
-            <MaterialCommunityIcons name="account-plus-outline" size={40} color={COLORS.emerald} />
+            <MaterialCommunityIcons
+              name="account-plus-outline"
+              size={40}
+              color={COLORS.emerald}
+            />
           </View>
           <Text variant="headlineMedium" style={styles.title}>
             Create Account
@@ -98,7 +114,7 @@ export default function RegisterScreen() {
             left={<TextInput.Icon icon="lock-outline" />}
             right={
               <TextInput.Icon
-                icon={showPassword ? 'eye-off' : 'eye'}
+                icon={showPassword ? "eye-off" : "eye"}
                 onPress={() => setShowPassword(!showPassword)}
               />
             }
@@ -150,14 +166,14 @@ const styles = StyleSheet.create({
   },
   scroll: {
     flexGrow: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 24,
     maxWidth: 440,
-    width: '100%',
-    alignSelf: 'center',
+    width: "100%",
+    alignSelf: "center",
   },
   header: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 40,
   },
   iconContainer: {
@@ -165,15 +181,15 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 20,
     backgroundColor: COLORS.surfaceVariant,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 16,
     borderWidth: 1,
     borderColor: COLORS.border,
   },
   title: {
     color: COLORS.textPrimary,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 4,
   },
   subtitle: {
@@ -193,8 +209,8 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   linkRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     marginTop: 8,
   },
   linkText: {
@@ -202,6 +218,6 @@ const styles = StyleSheet.create({
   },
   link: {
     color: COLORS.emerald,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });
