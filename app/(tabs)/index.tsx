@@ -44,6 +44,13 @@ const FEATURES: FeatureTile[] = [
     color: '#F472B6',
     route: '/(tabs)/birthdays',
   },
+  {
+    icon: 'flask-outline',
+    title: 'Playground',
+    description: 'Test features & notifications',
+    color: '#A78BFA',
+    route: '/(tabs)/playground',
+  },
 ];
 
 export default function HomeScreen() {
